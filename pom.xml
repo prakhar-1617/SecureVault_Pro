@@ -52,12 +52,6 @@
             <artifactId>javafx-base</artifactId>
             <version>${javafx.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-chart</artifactId>
-            <version>${javafx.version}</version>
-            <!-- Note: artifact id is javafx-chart but groupId module is javafx.charts -->
-        </dependency>
 
         <!-- ===== MySQL Connector ===== -->
         <dependency>
