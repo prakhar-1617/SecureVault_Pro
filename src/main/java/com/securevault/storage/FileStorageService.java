@@ -54,6 +54,19 @@ import java.util.List;
  */
 public class FileStorageService {
 
+    private static volatile FileStorageService instance;
+
+    public static FileStorageService getInstance() {
+        if (instance == null) {
+            synchronized (FileStorageService.class) {
+                if (instance == null) {
+                    instance = new FileStorageService();
+                }
+            }
+        }
+        return instance;
+    }
+
     private final DatabaseManager    db;
     private final ChecksumManager    checksumManager;
     private final AnalyticsService   analytics;
