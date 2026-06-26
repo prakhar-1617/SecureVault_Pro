@@ -57,7 +57,7 @@ public class FileManagerController {
     private int currentUserId;
 
     public FileManagerController() {
-        this.storageService = new FileStorageService();
+        this.storageService = FileStorageService.getInstance();
         SessionManager session = SessionManager.getInstance();
         this.currentUserId = session.isActive() ? session.getCurrentUser().getUserId() : -1;
     }
