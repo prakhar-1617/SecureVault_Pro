@@ -78,13 +78,25 @@ public final class PasswordHasher {
      * @throws AuthenticationException if the PBKDF2 algorithm is unavailable
      */
     public String hash(char[] password, String saltBase64) {
+        byte[] keyBytes = deriveKey(password, saltBase64);
+        return Base64.getEncoder().encodeToString(keyBytes);
+    }
+
+    /**
+     * Derives a cryptographic key from the password and salt.
+     *
+     * @param password     plaintext password (char[])
+     * @param saltBase64   Base64-encoded salt
+     * @return raw derived key bytes
+     */
+    public byte[] deriveKey(char[] password, String saltBase64) {
         byte[] salt = Base64.getDecoder().decode(saltBase64);
         try {
             PBEKeySpec spec = new PBEKeySpec(password, salt, iterations, keyLengthBits);
             SecretKeyFactory factory = SecretKeyFactory.getInstance(ALGORITHM);
-            byte[] hashBytes = factory.generateSecret(spec).getEncoded();
+            byte[] keyBytes = factory.generateSecret(spec).getEncoded();
             spec.clearPassword();   // Zero out password from memory
-            return Base64.getEncoder().encodeToString(hashBytes);
+            return keyBytes;
         } catch (NoSuchAlgorithmException e) {
             throw new AuthenticationException(
                     "PBKDF2WithHmacSHA256 not available on this JVM",
