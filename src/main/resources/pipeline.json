@@ -1,0 +1,16 @@
+{
+  "description": "Default decorator pipeline applied to files before AES encryption.",
+  "comment": "Steps are applied in ORDER: first step executes first, last step executes last. Decryption applies them in REVERSE order automatically.",
+  "steps": [
+    "COMPRESS",
+    "AES",
+    "CHECKSUM"
+  ],
+  "available_steps": {
+    "COMPRESS": "Deflate-compresses bytes before encryption (saves space + increases entropy)",
+    "AES": "AES-256-GCM encryption (always present in a real pipeline)",
+    "CHECKSUM": "Appends SHA-256 checksum for integrity verification",
+    "XOR": "XOR byte transformation (demo only — illustrates Strategy Pattern)",
+    "REVERSE": "Reverses byte array (demo only)"
+  }
+}
