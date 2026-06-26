@@ -26,7 +26,7 @@
         <javafx.version>21.0.2</javafx.version>
         <junit.version>5.10.1</junit.version>
         <mysql.version>8.2.0</mysql.version>
-        <main.class>com.securevault.ui.MainApp</main.class>
+        <main.class>com.securevault.Main</main.class>
     </properties>
 
     <dependencies>
