@@ -232,4 +232,42 @@ public final class ConfigurationManager {
     public String getEncryptedFilesDir() {
         return getString("encrypted.files.dir", "encrypted_files");
     }
+
+    /**
+     * Updates a configuration property in-memory and attempts to persist it to disk.
+     *
+     * @param key   configuration key
+     * @param value configuration value
+     */
+    public synchronized void setProperty(String key, String value) {
+        properties.setProperty(key, value);
+        
+        // Write back to config files
+        String[] possiblePaths = {
+            "src/main/resources/config.properties",
+            "target/classes/config.properties"
+        };
+        
+        for (String pathStr : possiblePaths) {
+            java.io.File file = new java.io.File(pathStr);
+            // If relative path doesn't resolve to existing directory, try absolute path from user workspace
+            if (!file.exists()) {
+                file = new java.io.File("d:/SecureVault-Pro/" + pathStr);
+            }
+            if (file.exists() || pathStr.startsWith("src/")) {
+                try {
+                    // Create parent dirs if necessary
+                    java.io.File parent = file.getParentFile();
+                    if (parent != null && !parent.exists()) {
+                        parent.mkdirs();
+                    }
+                    try (java.io.FileOutputStream out = new java.io.FileOutputStream(file)) {
+                        properties.store(out, "Updated via Configurations UI");
+                    }
+                } catch (IOException e) {
+                    System.err.println("[ConfigManager] Warning: failed to save to " + file.getAbsolutePath() + ": " + e.getMessage());
+                }
+            }
+        }
+    }
 }
