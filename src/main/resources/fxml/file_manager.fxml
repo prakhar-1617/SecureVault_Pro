@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.securevault.ui.FileManagerController">
+    <children>
+        <!-- Header -->
+        <VBox spacing="5.0">
+            <children>
+                <Label styleClass="label-header" text="File Encryptor &amp; Storage Vault" />
+                <Label styleClass="label-subtitle" text="Stream files securely into the vault. Large files auto-route via NIO channels." />
+            </children>
+        </VBox>
+        
+        <!-- Encryption Upload Panel -->
+        <VBox spacing="15.0" styleClass="glass-panel">
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+            <children>
+                <Label style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Encrypt &amp; Upload New File" />
+                
+                <HBox alignment="CENTER_LEFT" spacing="15.0">
+                    <children>
+                        <Button fx:id="selectFileBtn" mnemonicParsing="false" onAction="#handleSelectFile" styleClass="btn-secondary" text="📁 Select File..." />
+                        <Label fx:id="selectedFileLabel" style="-fx-font-size: 13px; -fx-text-fill: -text-muted;" text="No file selected" HBox.hgrow="ALWAYS" />
+                        
+                        <Label styleClass="label-subtitle" text="Algorithm:" />
+                        <ComboBox fx:id="algoComboBox" prefWidth="120.0" promptText="Select" />
+                        
+                        <Button fx:id="encryptUploadBtn" mnemonicParsing="false" onAction="#handleEncryptUpload" styleClass="btn-primary" text="Encrypt &amp; Upload" />
+                    </children>
+                </HBox>
+                
+                <VBox fx:id="progressContainer" spacing="5.0" visible="false" managed="false">
+                    <children>
+                        <HBox alignment="CENTER_LEFT">
+                            <children>
+                                <Label fx:id="progressStatusLabel" styleClass="label-subtitle" text="Encrypting file..." />
+                                <VBox HBox.hgrow="ALWAYS" />
+                                <Label fx:id="progressPercentLabel" styleClass="label-subtitle" text="0%" />
+                            </children>
+                        </HBox>
+                        <ProgressBar fx:id="uploadProgressBar" maxWidth="1.7976931348623157E308" progress="0.0" />
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+        
+        <!-- Files List & Search -->
+        <VBox spacing="10.0" VBox.vgrow="ALWAYS">
+            <children>
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                    <children>
+                        <TextField fx:id="searchField" promptText="Search files by name..." HBox.hgrow="ALWAYS" />
+                        <ComboBox fx:id="filterAlgoComboBox" prefWidth="120.0" promptText="All Algorithms" />
+                        <Button mnemonicParsing="false" onAction="#handleSearch" styleClass="btn-secondary" text="Search" />
+                        <Button mnemonicParsing="false" onAction="#handleRefresh" styleClass="btn-secondary" text="Refresh" />
+                    </children>
+                </HBox>
+                
+                <TableView fx:id="filesTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="idCol" prefWidth="60.0" text="ID" />
+                        <TableColumn fx:id="nameCol" prefWidth="250.0" text="File Name" />
+                        <TableColumn fx:id="algoCol" prefWidth="120.0" text="Algorithm" />
+                        <TableColumn fx:id="sizeCol" prefWidth="120.0" text="Original Size" />
+                        <TableColumn fx:id="timeCol" prefWidth="180.0" text="Upload Time" />
+                    </columns>
+                </TableView>
+                
+                <HBox spacing="10.0">
+                    <children>
+                        <Button fx:id="downloadBtn" mnemonicParsing="false" onAction="#handleDownloadSelected" styleClass="btn-primary" text="📥 Download &amp; Decrypt Selected" />
+                        <Button fx:id="deleteBtn" mnemonicParsing="false" onAction="#handleDeleteSelected" styleClass="btn-secondary" style="-fx-text-fill: #ef4444;" text="🗑 Delete Selected" />
+                        <VBox HBox.hgrow="ALWAYS" />
+                        <Label fx:id="tableStatusLabel" styleClass="label-subtitle" text="Showing 0 files" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</VBox>
