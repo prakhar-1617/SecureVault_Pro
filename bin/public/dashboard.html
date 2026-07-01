@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SecureVault Pro Dashboard - Manage your encrypted passwords, files, and view real-time system performance metrics.">
+    <title>SecureVault Pro — Command Center</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Style -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="dashboard-page">
+    <div class="background-glow bg-glow-1"></div>
+    <div class="background-glow bg-glow-2"></div>
+
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </div>
+                <h2>SecureVault <span class="accent-text">Pro</span></h2>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#overview" class="nav-item active" id="navOverview">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+                    <span>Overview</span>
+                </a>
+                <a href="#vault" class="nav-item" id="navVault">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M21 2v6h-6M3 22v-6h6M21 12a9 9 0 1 1-6.219-8.56"></path></svg>
+                    <span>Password Vault</span>
+                </a>
+                <a href="#files" class="nav-item" id="navFiles">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <span>File Crypt</span>
+                </a>
+                <a href="#analytics" class="nav-item" id="navAnalytics">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    <span>Analytics</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="avatar" id="userAvatar">U</div>
+                    <div class="details">
+                        <span class="username" id="sessionUsername">Active User</span>
+                        <span class="role">Secured Session</span>
+                    </div>
+                </div>
+                <button class="btn btn-logout" id="logoutBtn" title="Lock Session">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    <span>Lock Session</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Workspace Contents -->
+        <main class="workspace">
+            <!-- Header bar -->
+            <header class="workspace-header">
+                <div class="breadcrumb">
+                    <span class="parent">SecureVault Pro</span>
+                    <span class="divider">/</span>
+                    <span class="current" id="currentTabTitle">Overview</span>
+                </div>
+                <div class="session-timer">
+                    <div class="pulse-indicator"></div>
+                    <span>Active Connection</span>
+                </div>
+            </header>
+
+            <!-- Tab 1: Overview -->
+            <section id="tabOverview" class="tab-content active">
+                <div class="welcome-banner">
+                    <h2>Hello, <span id="welcomeUserName" class="accent-text">User</span>!</h2>
+                    <p>Your cryptographic space is unlocked. Below is a quick overview of your vault's security performance.</p>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="card-icon blue">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        </div>
+                        <div class="card-info">
+                            <span class="label">Total Encrypted Files</span>
+                            <span class="value" id="statFiles">0</span>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="card-icon purple">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        </div>
+                        <div class="card-info">
+                            <span class="label">Stored Credentials</span>
+                            <span class="value" id="statCreds">0</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="card-icon green">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                        </div>
+                        <div class="card-info">
+                            <span class="label">Total Decryptions</span>
+                            <span class="value" id="statDecryptions">0</span>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="card-icon red">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                        </div>
+                        <div class="card-info">
+                            <span class="label">Failed Operations</span>
+                            <span class="value" id="statFailures">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live monitoring details -->
+                <div class="dashboard-details-row">
+                    <div class="details-box glass">
+                        <h3>Active Performance Diagnostics</h3>
+                        <p class="description">Live stats on caching efficiency and throughput.</p>
+                        <div class="analytics-mini-stats">
+                            <div class="mini-stat-item">
+                                <span class="num" id="statThroughput">0.00 MB</span>
+                                <span class="lbl">Bytes Encrypted</span>
+                            </div>
+                            <div class="mini-stat-item">
+                                <span class="num" id="statCacheRatio">0%</span>
+                                <span class="lbl">LRU Cache Hit Ratio</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="details-box glass">
+                        <h3>Quick Crypt Tips</h3>
+                        <ul class="crypt-tips-list">
+                            <li><strong>AES-256-GCM:</strong> Standard authenticated encryption. Best for high-security files.</li>
+                            <li><strong>XOR/Caesar:</strong> Educational algorithms. Extremely fast but low security.</li>
+                            <li><strong>LRU Caching:</strong> Vault prevents re-encrypting identical files using content checksum comparison.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab 2: Password Vault -->
+            <section id="tabVault" class="tab-content">
+                <div class="toolbar">
+                    <div class="search-bar">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" id="vaultSearchInput" placeholder="Search accounts by website, username, notes...">
+                    </div>
+                    <button class="btn btn-primary" id="openAddCredModalBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        <span>New Credential</span>
+                    </button>
+                </div>
+
+                <!-- Credentials grid -->
+                <div class="credentials-grid" id="credentialsContainer">
+                    <!-- Dynamic rendering -->
+                </div>
+            </section>
+
+            <!-- Tab 3: File Crypt -->
+            <section id="tabFiles" class="tab-content">
+                <div class="file-operations-row">
+                    <!-- File encryption console -->
+                    <div class="file-panel glass">
+                        <h3>Encrypt Local File</h3>
+                        <p class="description">Select a file on your device and specify the encryption strategy.</p>
+                        <form id="encryptFileForm">
+                            <div class="input-group">
+                                <label for="encryptFilePath">Absolute File Path</label>
+                                <div class="input-wrapper">
+                                    <input type="text" id="encryptFilePath" placeholder="e.g. C:/data/confidential.pdf" required>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="encryptAlgorithm">Encryption Algorithm</label>
+                                <div class="input-wrapper">
+                                    <select id="encryptAlgorithm">
+                                        <option value="AES" selected>AES-256-GCM (Highly Secure)</option>
+                                        <option value="XOR">XOR (Simple Key Cipher)</option>
+                                        <option value="CAESAR">Caesar (Shift Cipher)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">
+                                <span>Encrypt & Vault File</span>
+                            </button>
+                        </form>
+                        <div class="form-alert error" id="encryptError" style="display: none; margin-top: 15px;"></div>
+                        <div class="form-alert success" id="encryptSuccess" style="display: none; margin-top: 15px;"></div>
+                    </div>
+
+                    <!-- File download/decrypt console -->
+                    <div class="file-panel glass" id="decryptFilePanel" style="display: none;">
+                        <h3>Decrypt & Extract File</h3>
+                        <p class="description">Decrypt file '<span id="decryptFileName">file.txt</span>' to a specific folder on your system.</p>
+                        <form id="decryptFileForm">
+                            <input type="hidden" id="decryptFileId">
+                            <div class="input-group">
+                                <label for="decryptDestPath">Destination Save Path</label>
+                                <div class="input-wrapper">
+                                    <input type="text" id="decryptDestPath" placeholder="e.g. C:/Downloads/restored_file.pdf" required>
+                                </div>
+                            </div>
+                            <div class="button-row">
+                                <button type="submit" class="btn btn-primary">Decrypt File</button>
+                                <button type="button" class="btn btn-secondary" id="cancelDecryptBtn">Cancel</button>
+                            </div>
+                        </form>
+                        <div class="form-alert error" id="decryptError" style="display: none; margin-top: 15px;"></div>
+                        <div class="form-alert success" id="decryptSuccess" style="display: none; margin-top: 15px;"></div>
+                    </div>
+                </div>
+
+                <!-- Securely cataloged files -->
+                <div class="files-section">
+                    <h3>Encrypted Vault Registry</h3>
+                    <div class="table-container glass">
+                        <table class="files-table">
+                            <thead>
+                                <tr>
+                                    <th>File Name</th>
+                                    <th>Original Size</th>
+                                    <th>Algorithm</th>
+                                    <th>Secure Checksum (SHA-256)</th>
+                                    <th>Vaulted Timestamp</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="filesTableBody">
+                                <!-- Dynamic rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab 4: Analytics -->
+            <section id="tabAnalytics" class="tab-content">
+                <div class="analytics-dashboard-row">
+                    <div class="analytics-panel glass">
+                        <h3>Algorithm Performance Profile</h3>
+                        <p class="description">Benchmarks of average encryption/decryption execution times (slowest first).</p>
+                        <div class="table-container">
+                            <table class="analytics-table">
+                                <thead>
+                                    <tr>
+                                        <th>Algorithm</th>
+                                        <th>Operation</th>
+                                        <th>Avg Execution</th>
+                                        <th>Range (Min - Max)</th>
+                                        <th>Avg Memory</th>
+                                        <th>Avg Queue Wait</th>
+                                        <th>Operations Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="analyticsTableBody">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analytics-dashboard-row" style="margin-top: 20px;">
+                    <div class="analytics-panel glass">
+                        <h3>Bottleneck Visualization</h3>
+                        <p class="description">Graph comparison of average execution latency (milliseconds).</p>
+                        <div class="latency-chart" id="latencyChartContainer">
+                            <!-- Dynamic bar chart constructed using raw HTML & CSS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal for Add/Edit Credential -->
+    <div class="modal-overlay" id="credModal" style="display: none;">
+        <div class="modal glass">
+            <div class="modal-header">
+                <h3 id="modalTitle">New Secure Credential</h3>
+                <button class="modal-close-btn" id="closeCredModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="credForm">
+                    <input type="hidden" id="credId">
+                    <div class="input-group">
+                        <label for="credWebsite">Website / Resource Name</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="credWebsite" placeholder="e.g. google.com" required>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="credUsername">Login ID / Username</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="credUsername" placeholder="e.g. user@gmail.com" required autocomplete="username">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="credPassword">Cipher Password</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="credPassword" placeholder="Enter password to encrypt" required autocomplete="new-password">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="credNotes">Notes / Description</label>
+                        <div class="input-wrapper">
+                            <textarea id="credNotes" placeholder="Write additional recovery details here..." rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="button-row">
+                        <button type="submit" class="btn btn-primary" id="saveCredBtn">Save Securely</button>
+                        <button type="button" class="btn btn-secondary" id="cancelCredBtn">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Logic -->
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -233,6 +233,11 @@ public final class ConfigurationManager {
         return getString("encrypted.files.dir", "encrypted_files");
     }
 
+    /** @return server port (default 8080) */
+    public int getServerPort() {
+        return getInt("server.port", 8080);
+    }
+
     /**
      * Updates a configuration property in-memory and attempts to persist it to disk.
      *

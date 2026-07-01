@@ -29,15 +29,15 @@ A production-style Java 17 desktop application that securely encrypts, stores, a
 | Layer | Technology |
 |---|---|
 | Language | Java 17 |
-| GUI | JavaFX 21 |
+| GUI | HTML, CSS, JavaScript (served via Java HttpServer) |
 | Database | MySQL 8 (or SQLite fallback) |
 | Security | PBKDF2WithHmacSHA256, AES-256-GCM, SHA-256 |
 | Concurrency | ExecutorService + PriorityBlockingQueue |
 | Patterns | Strategy, Factory, Decorator, Singleton, Observer |
 | Streams | BufferedInputStream + NIO FileChannel |
 | Cache | LinkedHashMap (LRU policy) |
-| Build | Maven 3.9 |
-| Testing | JUnit 5 + Mockito |
+| Build | Raw `javac` / JDK 17 (No Maven) |
+| Testing | Native assertions or manual test classes (No Maven/JUnit) |
 
 ---
 
@@ -45,8 +45,8 @@ A production-style Java 17 desktop application that securely encrypts, stores, a
 
 ### Phase 1 — Foundation
 
-#### [NEW] `pom.xml` (project root)
-Maven project descriptor. Dependencies: JavaFX 21, MySQL Connector/J 8, JUnit 5, Mockito. Java 17 compiler target. JavaFX Maven plugin for `mvn javafx:run`.
+#### [DELETE] `pom.xml` (project root)
+Removing Maven entirely per requirements. The project will rely purely on the standard Java 17 library and a downloaded `mysql-connector-j.jar` for SQL access.
 
 #### [NEW] `src/main/java/com/securevault/config/ConfigurationManager.java`
 - **Singleton** (thread-safe, double-checked locking)
@@ -207,21 +207,28 @@ Fields: `id`, `ownerId`, `website`, `username`, `encryptedPassword`, `notes`, `l
 - CRUD operations on credentials (password encrypted with user's AES key)
 - `search(keyword)` using linear scan + `TreeMap` for sorted display
 
-#### [NEW] JavaFX UI
+#### [NEW] Web Frontend (HTML/CSS/JS)
 ```
-ui/
-  MainApp.java                    (Application entry point)
-  LoginController.java
-  RegisterController.java
-  DashboardController.java
-  FileManagerController.java
-  VaultController.java
-  AnalyticsDashboardController.java
-  SettingsController.java
+src/main/resources/public/
+  index.html                      (Login/Register)
+  dashboard.html                  (Main application view)
+  css/
+    style.css                     (Modern UI, glassmorphism, dark mode)
+  js/
+    app.js                        (API interaction)
 ```
-FXML files in `src/main/resources/fxml/`. CSS theme in `src/main/resources/styles/dark-theme.css`.
 
-**Design**: Dark glassmorphism theme, sidebar navigation, animated file upload progress, real-time analytics charts (JavaFX Charts API).
+#### [NEW] REST API Server (Pure Java)
+```
+api/
+  ApiServer.java                  (com.sun.net.httpserver.HttpServer setup)
+  AuthHandler.java                (Implements HttpHandler for /api/login)
+  VaultHandler.java               (Implements HttpHandler for /api/vault)
+  FileHandler.java                (Implements HttpHandler for /api/files)
+  StaticFileHandler.java          (Serves HTML/CSS/JS from src/main/resources/public)
+```
+
+**Design**: Modern web UI, vibrant dark mode, smooth transitions. The pure Java `HttpServer` will serve the static HTML/CSS files and handle JSON endpoints using manual parsing (no Jackson).
 
 ---
 
@@ -287,10 +294,16 @@ SecureVault-Pro/
 
 ## Verification Plan
 
-### Automated Tests
+### Automated Tests (Removed)
+Since Maven and JUnit are removed, tests will be run via custom `public static void main` driver classes in a `test/` folder.
+
+### Manual Compilation
 ```bash
-mvn test                          # Run all JUnit 5 tests
-mvn javafx:run                    # Launch the application
+# Compile
+javac -d out -cp "lib/*" $(find src -name "*.java")
+
+# Run
+java -cp "out;lib/*" com.securevault.Main
 ```
 
 ### Manual Verification (per phase)
@@ -325,5 +338,7 @@ exceptions → util → config → database
                                 ↓
                     vault
                                 ↓
-                    ui (JavaFX, wires all services)
+                    api (Pure Java HttpServer + HttpHandlers)
+                                ↓
+                    public (HTML/CSS/JS frontend)
 ```
