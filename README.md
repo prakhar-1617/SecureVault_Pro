@@ -1,6 +1,4 @@
-# SecureVault Pro — Secure File Storage & Password Vault
-
-SecureVault Pro is an enterprise-grade desktop security application built using **Java 17** and **JavaFX 21**. It provides two core functions: secure, high-performance file encryption/decryption, and a credential vault for managing accounts and passwords. 
+SecureVault Pro is an enterprise-grade security application built using **Java 17** with a modern **HTML/CSS/JS web frontend** served via a built-in, dependency-free Java HTTP server (`com.sun.net.httpserver.HttpServer`). It provides two core functions: secure, high-performance file encryption/decryption, and a credential vault for managing accounts and passwords. 
 
 The project is designed to demonstrate industry-standard practices and technical depth across OOP, concurrency, DSA, database management, and cryptography—ideal for technical interview discussions.
 
@@ -49,9 +47,9 @@ The codebase is built on strict SOLID principles and utilizes several core desig
 
 *   **Language:** Java 17 (utilizing modern features like Records, Text Blocks, and Pattern Matching).
 *   **Database:** MySQL 8.0 (Fallback ready, schema auto-bootstraps on first connection).
-*   **GUI Library:** JavaFX 21.0.2 with a premium Dark Glassmorphism CSS layout.
-*   **Testing:** JUnit 5 for unit testing.
-*   **Build Tool:** Maven 3.9.
+*   **GUI / Frontend:** Modern Web UI (HTML, CSS, JavaScript) utilizing dark mode and glassmorphism.
+*   **Server Engine:** Java standard library `com.sun.net.httpserver.HttpServer`.
+*   **Build Tool:** Dependency-free manual compilation (`compile.bat` and `run.bat`).
 
 ---
 
@@ -59,12 +57,14 @@ The codebase is built on strict SOLID principles and utilizes several core desig
 
 ```
 SecureVault-Pro/
-├── pom.xml                      # Maven project configuration
+├── compile.bat                  # Batch script to compile project and sync resources
+├── run.bat                      # Batch script to launch the application
 ├── schema.sql                   # Database table definitions
 ├── src/
 │   ├── main/
 │   │   ├── java/com/securevault/
-│   │   │   ├── Main.java         # Bootstrap non-Application launcher
+│   │   │   ├── Main.java         # Server bootstrap entry point
+│   │   │   ├── api/             # Built-in Web Server, HTTP Handlers, and static files router
 │   │   │   ├── auth/            # Users, PBKDF2 hashing, and SessionManager
 │   │   │   ├── config/          # ConfigurationManager Singleton
 │   │   │   ├── database/        # DatabaseManager Singleton
@@ -77,16 +77,13 @@ SecureVault-Pro/
 │   │   │   ├── storage/         # Buffered + NIO FileStorageService
 │   │   │   ├── task/            # FileTask and TaskPriority models
 │   │   │   ├── thread/          # Priority thread pool manager
-│   │   │   ├── ui/              # JavaFX MainApp and View Controllers
+│   │   │   ├── util/            # Custom JSON parser and cryptographic utilities
 │   │   │   └── vault/           # Credential model and PasswordVaultService
 │   │   └── resources/
-│   │       ├── config.properties# Runtime configurations (threads, buffer, etc.)
+│   │       ├── config.properties# Runtime configurations (threads, port, buffer, etc.)
 │   │       ├── pipeline.json    # Pipeline custom decorator chains
 │   │       ├── schema.sql       # Copy of DB schema for bootstrapping
-│   │       ├── fxml/            # JavaFX views (login, dashboard, vault, etc.)
-│   │       └── styles/          # Styling CSS (dark-theme.css)
-│   └── test/
-│       └── java/com/securevault/# JUnit 5 unit tests for core services
+│   │       └── public/          # HTML/CSS/JS frontend files (Static assets)
 ```
 
 ---
@@ -94,12 +91,12 @@ SecureVault-Pro/
 ## Setup & Execution
 
 ### Prerequisites
-1. **Java Development Kit (JDK) 17** or higher.
-2. **Maven 3.9** or higher.
-3. **MySQL Server 8.0** running locally.
+1. **Java Development Kit (JDK) 17** or higher configured in your environment.
+2. **MySQL Server 8.0** running locally.
+3. **MySQL JDBC Driver** (place `mysql-connector-j-x.x.x.jar` inside the `lib/` directory before building).
 
 ### 1. Database Configuration
-Ensure MySQL is running and create the schema. You can run the schema script manually, or the application's `DatabaseManager` will auto-bootstrap it on first connection:
+Ensure MySQL is running and create the schema:
 ```sql
 CREATE DATABASE IF NOT EXISTS securevault;
 ```
@@ -108,22 +105,24 @@ Configure your credentials in `src/main/resources/config.properties`:
 db.url=jdbc:mysql://localhost:3306/securevault?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
 db.user=root
 db.password=your_mysql_password
+server.port=8080
 ```
 
 ### 2. Compilation
-Compile and build the project using Maven:
+Compile all Java sources and sync files using the manual batch script:
 ```bash
-mvn clean compile
+# Run on Windows Cmd / PowerShell
+.\compile.bat
 ```
 
-### 3. Run Unit Tests
-Run all JUnit 5 unit tests to verify the integrity and security layers:
+### 3. Launching the App
+Run the launcher script:
 ```bash
-mvn test
+.\run.bat
 ```
 
-### 4. Launch the GUI
-Launch the desktop application:
-```bash
-mvn javafx:run
+### 4. Viewing the GUI
+Once the server is running successfully, open your web browser and navigate to:
+```
+http://localhost:8080
 ```
