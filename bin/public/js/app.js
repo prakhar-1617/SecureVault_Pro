@@ -168,6 +168,8 @@ function initAuthPage() {
 //  2. Dashboard Page Logic
 // ==========================================================================
 let activeTab = 'overview';
+let _vaultInitialized = false;
+let _filesInitialized = false;
 
 function initDashboardPage() {
     // Validate session first
@@ -266,12 +268,18 @@ function loadTabContent() {
             loadOverviewData();
             break;
         case 'vault':
+            if (!_vaultInitialized) {
+                initVaultActions();
+                _vaultInitialized = true;
+            }
             loadVaultData();
-            initVaultActions();
             break;
         case 'files':
+            if (!_filesInitialized) {
+                initFilesActions();
+                _filesInitialized = true;
+            }
             loadFilesData();
-            initFilesActions();
             break;
         case 'analytics':
             loadAnalyticsData();
