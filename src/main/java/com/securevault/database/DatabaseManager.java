@@ -13,21 +13,27 @@ import java.util.stream.Collectors;
 /**
  * Singleton that manages the single JDBC {@link Connection} to MySQL.
  *
- * <p><b>Design Decision — No custom connection pool:</b> Production applications
+ * <p>
+ * <b>Design Decision — No custom connection pool:</b> Production applications
  * use mature libraries like HikariCP rather than reimplementing pooling logic.
  * A single connection is appropriate for a desktop application with a single
  * concurrent user. The connection is lazily created and kept alive with
  * {@link Connection#isValid(int)} checks before each use.
  *
- * <p><b>Design Pattern:</b> Singleton — ensures exactly one database connection
+ * <p>
+ * <b>Design Pattern:</b> Singleton — ensures exactly one database connection
  * throughout the application lifetime, preventing connection leaks.
  *
- * <p><b>Schema Bootstrapping:</b> On first connection, {@code schema.sql} is
- * executed to create all tables if they don't exist (idempotent {@code CREATE TABLE IF NOT EXISTS}).
+ * <p>
+ * <b>Schema Bootstrapping:</b> On first connection, {@code schema.sql} is
+ * executed to create all tables if they don't exist (idempotent
+ * {@code CREATE TABLE IF NOT EXISTS}).
  *
- * <p><b>Interview talking point:</b>
+ * <p>
+ * <b>Interview talking point:</b>
  * "Why not HikariCP here?" — Desktop app with one user. HikariCP is the
- * right answer for a Spring Boot REST service handling concurrent HTTP requests.
+ * right answer for a Spring Boot REST service handling concurrent HTTP
+ * requests.
  *
  * @author SecureVault Pro
  * @version 1.0.0
@@ -35,7 +41,7 @@ import java.util.stream.Collectors;
 public final class DatabaseManager {
 
     // ------------------------------------------------------------------ //
-    //  Singleton boilerplate
+    // Singleton boilerplate
     // ------------------------------------------------------------------ //
 
     private static volatile DatabaseManager instance;
@@ -65,21 +71,22 @@ public final class DatabaseManager {
     }
 
     // ------------------------------------------------------------------ //
-    //  Connection management
+    // Connection management
     // ------------------------------------------------------------------ //
 
     /**
-     * Opens the JDBC connection using credentials from {@link ConfigurationManager}.
+     * Opens the JDBC connection using credentials from
+     * {@link ConfigurationManager}.
      */
     private void connect() {
         try {
-            // MySQL Connector/J auto-registers via ServiceLoader; explicit load kept for clarity
+            // MySQL Connector/J auto-registers via ServiceLoader; explicit load kept for
+            // clarity
             Class.forName("com.mysql.cj.jdbc.Driver");
             this.connection = DriverManager.getConnection(
                     config.getDbUrl(),
                     config.getDbUser(),
-                    config.getDbPassword()
-            );
+                    config.getDbPassword());
             this.connection.setAutoCommit(true);
             System.out.println("[DatabaseManager] Connected to MySQL successfully.");
         } catch (ClassNotFoundException e) {
@@ -90,9 +97,11 @@ public final class DatabaseManager {
     }
 
     /**
-     * Returns a valid {@link Connection}, reconnecting if the existing one is stale.
+     * Returns a valid {@link Connection}, reconnecting if the existing one is
+     * stale.
      *
-     * <p>Uses {@link Connection#isValid(int)} with a 2-second timeout to detect
+     * <p>
+     * Uses {@link Connection#isValid(int)} with a 2-second timeout to detect
      * broken connections (e.g., MySQL server restarted).
      *
      * @return a live JDBC connection
@@ -104,7 +113,7 @@ public final class DatabaseManager {
                 connect();
             }
         } catch (SQLException e) {
-            connect();   // Force reconnect on any error
+            connect(); // Force reconnect on any error
         }
         return connection;
     }
@@ -124,13 +133,14 @@ public final class DatabaseManager {
     }
 
     // ------------------------------------------------------------------ //
-    //  Schema bootstrapping
+    // Schema bootstrapping
     // ------------------------------------------------------------------ //
 
     /**
      * Reads and executes {@code schema.sql} from the classpath.
      *
-     * <p>All statements use {@code CREATE TABLE IF NOT EXISTS}, making this
+     * <p>
+     * All statements use {@code CREATE TABLE IF NOT EXISTS}, making this
      * operation idempotent — safe to run on every startup.
      */
     private void bootstrapSchema() {
@@ -165,7 +175,7 @@ public final class DatabaseManager {
     }
 
     // ------------------------------------------------------------------ //
-    //  Helper: execute an update (INSERT / UPDATE / DELETE)
+    // Helper: execute an update (INSERT / UPDATE / DELETE)
     // ------------------------------------------------------------------ //
 
     /**
@@ -181,7 +191,8 @@ public final class DatabaseManager {
             bindParams(ps, params);
             ps.executeUpdate();
             try (ResultSet keys = ps.getGeneratedKeys()) {
-                if (keys.next()) return keys.getLong(1);
+                if (keys.next())
+                    return keys.getLong(1);
             }
         } catch (SQLException e) {
             throw new SecureVaultException("DB update failed: " + e.getMessage(), e);
@@ -190,7 +201,7 @@ public final class DatabaseManager {
     }
 
     // ------------------------------------------------------------------ //
-    //  Helper: prepare statement with bound parameters
+    // Helper: prepare statement with bound parameters
     // ------------------------------------------------------------------ //
 
     /**
@@ -209,7 +220,7 @@ public final class DatabaseManager {
     }
 
     // ------------------------------------------------------------------ //
-    //  Private helpers
+    // Private helpers
     // ------------------------------------------------------------------ //
 
     private void bindParams(PreparedStatement ps, Object[] params) throws SQLException {
