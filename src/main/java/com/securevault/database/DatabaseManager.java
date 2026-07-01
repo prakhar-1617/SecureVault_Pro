@@ -147,9 +147,14 @@ public final class DatabaseManager {
             String[] statements = sql.split(";");
             try (Statement stmt = connection.createStatement()) {
                 for (String statement : statements) {
-                    String trimmed = statement.trim();
-                    if (!trimmed.isEmpty() && !trimmed.startsWith("--")) {
-                        stmt.execute(trimmed);
+                    // Strip individual comment lines from each statement block
+                    // This handles CREATE TABLE blocks that have leading -- comments
+                    String stripped = java.util.Arrays.stream(statement.split("\n"))
+                            .filter(line -> !line.trim().startsWith("--"))
+                            .collect(Collectors.joining("\n"))
+                            .trim();
+                    if (!stripped.isEmpty()) {
+                        stmt.execute(stripped);
                     }
                 }
             }
